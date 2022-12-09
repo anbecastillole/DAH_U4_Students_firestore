@@ -15,16 +15,34 @@ export class ViewStudentPage implements OnInit {
 
   public student: Student;
 
-  constructor(private studentService: StudentService, private activatedRoute: ActivatedRoute) {
-    
-  }
+  constructor(private studentService: StudentService, private activatedRoute: ActivatedRoute, private router : Router) {
+    this.student = {
+      controlnumber: "",
+      name: "",
+      curp: "",
+      age: 0,
+      nip: 0,
+      email: "",
+      career: "",
+      photo: "",
+      id: ""
+
+    }
+  }//consulta geenral para tareas ponerle firebase a todo lo de tareas. a tdo lo del hotel ponerle firebase
 
   ngOnInit() {
     // let cn;
     this.activatedRoute.queryParams.subscribe((params) => {
-      this.student = this.studentService.getStudentByControlNumber(params.cn);
+     // this.student = this.studentService.getStudentByControlNumber(params.cn);
+     this.studentService.getStudentById(params.id).subscribe(item =>{
+      console.log(item);
+      this.student = item as Student;
+     });
     });
     // console.log(cn);
   }
 
+
 }
+
+

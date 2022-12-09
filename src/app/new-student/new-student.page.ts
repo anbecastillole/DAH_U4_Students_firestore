@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Student } from '../models/student';
 import { StudentService } from '../services/student.service';
+import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-student',
@@ -14,7 +16,8 @@ export class NewStudentPage implements OnInit {
   public myForm: FormGroup;
   public validationMessages: object;
 
-  constructor(private studentService: StudentService, private fb: FormBuilder) { }
+  constructor(private studentService: StudentService, private fb: FormBuilder, private toastController: ToastController,
+    private router: Router) { }
 
   ngOnInit() {
     this.myForm = this.fb.group({
@@ -82,8 +85,20 @@ export class NewStudentPage implements OnInit {
       photo: this.myForm.controls.photo.value,
     }
 
-    console.log(this.studentService.newStudent(this.student));
-    
-  }
 
+    this.studentService.newStudent(this.student);
+    this.presentToast("top")
+    this.router.navigate(['..']);
+     //laznar un toast de quw se guardpo y regresar aa patanla  de consulta de estudiante
+  }
+  async presentToast(position: 'top' | 'middle' | 'bottom') {
+    const toast = await this.toastController.create({
+      message: 'GUARDADO CORRECTAMENTE!',
+      duration: 1500,
+      position,
+      color:'success'
+    });
+
+    await toast.present();
+  }
 }
